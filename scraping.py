@@ -1,28 +1,46 @@
 import requests
 from bs4 import BeautifulSoup
 
-# Récupération du tags ciblé et de l'url de la page
+# Définition du tag cible et de l'URL de la page à scraper
 targetTag = "ResultsContainer"
 URL = "https://realpython.github.io/fake-jobs/"
-# Récupération des données brutes de la page en HTML
+
+# Envoi d'une requête HTTP pour récupérer le contenu brut HTML de la page
 page = requests.get(URL)
 
-# Affectation du contenu dans l'instance Beautiful soup
+# Initialisation de BeautifulSoup pour analyser le contenu HTML
 soup = BeautifulSoup(page.content, "html.parser")
-# Récupération du contenu selon l'ID d'un TAG
+
+# Recherche de l'élément HTML par son ID (ici, ResultsContainer)
 results = soup.find(id=targetTag)
-# Récupération des jobs selon la class ".card" en type ResultSet
-job_elements = results.find_all("div", class_="card-content")
-#print(type(job_elements))
-# Affichage du résultats
-for job_element in job_elements:
-    # Récupération de chaques éléments HTML pertinent h2, h3, p
+
+# Filtrage des offres d'emploi contenant le mot "python" dans un élément h2
+python_jobs = results.find_all(
+    "h2", string=lambda text: "python" in text.lower()
+)
+
+# Récupération des éléments complets de chaque offre d'emploi Python (remontée jusqu'au conteneur parent)
+python_jobs_elements = [
+    h2_element.parent.parent.parent for h2_element in python_jobs
+]
+
+# Parcours des offres d'emploi Python trouvées et extraction des informations pertinentes
+for job_element in python_jobs_elements:
+    # Extraction du titre de l'offre (h2), de l'entreprise (h3) et de la localisation (p)
     title_element = job_element.find("h2", class_="title")
     company_element = job_element.find("h3", class_="company")
     location_element = job_element.find("p", class_="location")
 
-    # Affichage du contenu de chaque éléments HTML + suppression de l'espace avant et après
+    # Affichage des informations extraites (titre, entreprise, localisation) en supprimant les espaces superflus
     print(title_element.text.strip())
     print(company_element.text.strip())
     print(location_element.text.strip())
+
+    # Recherche du lien "Apply" et affichage du lien de candidature si disponible
+    links = job_element.find_all("a")
+    if len(links) > 1:
+        link_url = links[1]["href"]
+        print(f"Apply here: {link_url}\n")
+
+    # Ajout d'une ligne vide pour séparer les différentes offres d'emploi affichées
     print()
