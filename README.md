@@ -12,7 +12,7 @@
 Pour cloner ce dépôt, utilisez la commande suivante :
 
 ```bash
-git clone git@github.com:TheSmartisen/SimplonScrapping.git
+git clone https://github.com/TheSmartisen/SimplonScrapping.git
 ```
 
 # Description du projet**
