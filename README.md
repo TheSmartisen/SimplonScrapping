@@ -15,7 +15,7 @@ Pour cloner ce dépôt, utilisez la commande suivante :
 git clone https://github.com/TheSmartisen/SimplonScrapping.git
 ```
 
-# Description du projet**
+# Description du projet
 
 Projet créé en adéquation du 3ème brief qui m'a été assigné sur Simplonline dans le but de comprendre le "Scrapping" et "BeautifulSoup".
 Ce projet est un script Python qui "scrape" une liste job orienté "python" sur un site de job.
